@@ -2,7 +2,7 @@
 // Example of using RBGS to solve Ax=b with known constants in A and b
 // Using tol = 0.000001, the number of iterations for the following n's should be:
 // n = 16, iters = 397; n = 32, iters = 1500; 
-// n = 64, iters = 5823;
+// n = 64, iters = 5823; n = 128, iters = 22939;
 // Note that the number of iterations varies linearly with n*n (solution grid size)
 // Iteration number is roughly half of Jacobi's
 
@@ -13,6 +13,8 @@ const solveDom = {1..n, 1..n};
 const fullDom = {0..n+1, 0..n+1};
 
 // O(n) additional space to store red, black indices
+// For n = 128, the overhead for generating red,black indices takes 0.020637 seconds
+// The solving part takes 5.91022 seconds
 
 var red_odd: sparse subdomain(solveDom);
 var red_even: sparse subdomain(solveDom);
