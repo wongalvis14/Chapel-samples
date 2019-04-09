@@ -2,7 +2,7 @@
 // Example of using Jacobi to solve Ax=b with known constants in A and b
 // Using tol = 0.000001, the number of iterations for the following n's should be:
 // n = 16, iters = 753; n = 32, iters = 2846; 
-// n = 64, iters = 11051; n = 128, iters = 43539;
+// n = 64, iters = 11051; n = 128, iters = 43539 (11.8531 seconds);
 // Note that the number of iterations varies linearly with n*n (solution grid size)
 
 config var n = 16;
