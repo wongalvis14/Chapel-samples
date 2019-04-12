@@ -1,9 +1,9 @@
 // Speed comparison over two axpy function that 
-// 1) returns a new result array
+// 1) uses `in` intent and returns a new result array
 // 2) modifies the referenced array Y
 // On TIO:
-// axpy with new array: 0.028651 seconds
-// axpy with ref/const ref: 0.006137 seconds
+// axpy with new array: 0.075171 seconds
+// axpy with ref/const ref: 0.005284 seconds
 
 use Time;
 
@@ -16,7 +16,7 @@ var B: [dom] real = [i in dom] cos(i) * cos(i);
 
 var C: [dom] real = 0.0;
 
-proc axpy_copy(X: [?D] ?etype, Y: [D] etype, alpha: etype) {
+proc axpy_copy(in X: [?D] ?etype, in Y: [D] etype, in alpha: etype) {
   var V: [D] real = 0.0;
   forall i in D {
     V[i] = alpha * X[i] + Y[i];
