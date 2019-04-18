@@ -2,10 +2,11 @@
 // Example usage in main() of 5-pt 2D Poisson
 
 use Math;
+use Time;
 
 // m is length of each side in 2D solution grid
 // i.e. length of vector x is n = m * m
-config var m = 16;
+config var m = 32;
 config var tol = 0.000001;
 
 proc jacobi(A: [?AD] ?etype, ref x: [?D] etype, b: [D] etype, tol, maxiter) {
@@ -27,11 +28,15 @@ proc jacobi(A: [?AD] ?etype, ref x: [?D] etype, b: [D] etype, tol, maxiter) {
   while (itern < maxiter) {
     itern = itern + 1;
     forall i in D {
-      // TODO: faster and less memory, e.g. linear algebra, reduction
+      // TODO: faster and less memory, reduce nested parallelism
       var sigma = 0.0;
       for j in D {
         if i!=j then sigma += A(i,j) * x(j);
       }
+      // If use reduction for summing up the dot product, it runs slower (11s -> 15s) 
+      // This is most probably due to the impact of nesting reduction within a forall
+      // sigma = + reduce (A(i,..)*x[..]);
+      // sigma -= A(i,i) * x(i);
       t(i) = (b(i) - sigma) / A(i,i);
     }
     err = max reduce abs(t[D] - x[D]);
@@ -69,8 +74,14 @@ proc main() {
 
   ref rx = x;
 
+  var t1: Timer;
+  t1.start();
+
   jacobi(A, rx, b, tol, 10000);
 
   // writeln(rx);
+
+  t1.stop();
+  writeln("Jacobi time elapsed: ", t1.elapsed(), " seconds");
 
 }
